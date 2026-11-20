@@ -32,11 +32,14 @@ def prepare_batches():
         print(f"{path.name} | week: {week} | customers: {len(batch)}")
 
 
-def process_received_batches():
-    files = sorted(INCOMING.glob("batch_*.csv"))
-    if not files:
-        raise SystemExit("No batch received. Copy a batch into batch_demo/incoming first.")
+def process_received_batches(folder):
+    incoming = folder / "incoming"
+    output = folder / "customers_received.csv"
+    files = sorted(incoming.glob("batch_*.csv"))
 
+    if not files:
+        raise SystemExit(f"No batch files found in {incoming}")
+    
     batches = []
     for path in files:
         batch = pd.read_csv(path, dtype={"CustomerID": "string"})
@@ -52,18 +55,24 @@ def process_received_batches():
     if customers["CustomerID"].duplicated().any():
         raise ValueError("A CustomerID appears more than once. Check the batch files.")
 
-    customers.to_csv(OUTPUT, index=False, encoding="utf-8-sig")
+    customers.to_csv(output, index=False, encoding="utf-8-sig")
     print(f"Batches received: {len(files)}")
     print(f"Total customers: {len(customers)}")
-    print(f"Saved to: {OUTPUT}")
+    print(f"Saved to: {output}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("action", choices=["prepare", "process"])
+    parser.add_argument(
+        "--folder",
+        type=Path,
+        default=DEMO,
+        help="Folder containing the incoming batch files",
+    )
     args = parser.parse_args()
 
     if args.action == "prepare":
         prepare_batches()
     else:
-        process_received_batches()
+        process_received_batches(args.folder)
