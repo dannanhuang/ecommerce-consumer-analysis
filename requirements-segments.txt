@@ -1,0 +1,5 @@
+dash>=3.0,<4
+numpy>=1.26,<3
+pandas>=2.2,<3
+plotly>=5.24,<7
+scikit-learn==1.6.1

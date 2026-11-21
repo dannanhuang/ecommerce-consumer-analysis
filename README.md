@@ -107,3 +107,72 @@ scaler and clustering model so that segment labels remain comparable across batc
 Team members work on separate task branches and submit pull requests for review
 before merging into `main`. All analyses use the same cleaned dataset and
 documented metric definitions.
+
+## Part C · Customer segments and retention (RQ2)
+
+The reference analysis covers 50,000 unique customers. Four clusters gave the
+highest sampled silhouette (0.328 among 2–8 candidates). The frequent-buying
+segment has a median purchase frequency of 11, a median gap of 18 days and
+median engagement of 0.521. The longest-gap and lowest-engagement segments each
+have a median frequency of 3. No single cluster captures the RQ2 behavior.
+
+To count individual customers who fit the question, we separately flag purchase
+frequency ≥ 7 **and** either a gap ≥ 41 days **or** engagement ≤ 0.403. These
+cutoffs are the reference upper quartiles for frequency and gap and the lower
+quartile for engagement, including ties. The flag spans all four clusters.
+Churn, lifetime value, satisfaction and loyalty are compared after clustering.
+
+| Reference cohort | Customers | Median estimated CLV | Median satisfaction | Median loyalty | Marked as churned |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Meet the RQ2 rule | 5,408 | 14,676 | 1.9 | 25.8 | 4,149 / 5,408 (76.72%) |
+| All others | 44,592 | 14,791.5 | 1.9 | 26.5 | 34,135 / 44,592 (76.55%) |
+
+The rule identifies 10.82% of customers. Their observed churn share is only
+0.17 percentage points higher. The data support a behavioral distinction;
+they give little reason to rank this cohort above the others by observed churn.
+
+### Run the customer-segment page
+
+From the repository root in a Python 3.12 or 3.13 environment:
+
+```sh
+python -m pip install -r requirements-segments.txt
+python segment_dashboard.py
+```
+
+Open http://127.0.0.1:8050. The checked-in outputs let the page open immediately.
+For the shared Dash app, import `build_layout` from `segment_dashboard` and
+mount `build_layout()` on the customer-segment route. Styles are scoped in
+`assets/segments.css`. An optional results directory selects a batch snapshot.
+
+### Score incoming customers
+
+After the existing batch workflow produces its cumulative cleaned file, run:
+
+```sh
+python segmentation.py score --input simulator_batches/customer_clean.csv --output reports/batch_segments
+python segment_dashboard.py --results reports/batch_segments
+```
+
+Each input is a snapshot with one row per customer. Re-running a snapshot
+replaces its output tables. Score a single batch by passing its CSV instead.
+Scoring reuses the reference feature order, scaler, centroids, names and
+quartile cutoffs from [the model](models/customer_segments.json). New records
+need a unique customer ID and all three valid behavior inputs. Outcome fields
+may be missing. Churn shares use the count of known 0/1 labels as denominator.
+
+[Customer assignments](reports/segments/assignments.csv) join back to the
+cleaned table by `CustomerID`. [Segment profiles](reports/segments/profiles.csv)
+and the [RQ2 cohort comparison](reports/segments/rq2_comparison.csv) provide the
+dashboard and report inputs. To reproduce the full reference model and outputs:
+
+```sh
+python segmentation.py train
+python -m unittest discover -s tests
+```
+
+Training uses ten K-means initializations per candidate and seed 42. All
+candidates use the same random sample of 3,000 customers for silhouette scoring.
+The reference fit includes the three supplied behavior fields, including
+`Days_Since_Last_Purchase` as reported in the source. The reference keeps rows
+flagged for purchase/acquisition date order, as agreed in the cleaning step.
