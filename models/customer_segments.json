@@ -1,0 +1,107 @@
+{
+  "features": [
+    "Purchase_Frequency",
+    "Days_Since_Last_Purchase",
+    "Engagement_Score"
+  ],
+  "mean": [
+    4.75504,
+    29.67092,
+    0.49399542
+  ],
+  "scale": [
+    3.834599665988615,
+    30.233313850016508,
+    0.12438147755603968
+  ],
+  "segments": [
+    {
+      "id": 1,
+      "name": "Frequent buyers",
+      "center": [
+        1.7337459590063387,
+        -0.21538458577144623,
+        0.1584743701840943
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Long purchase gap",
+      "center": [
+        -0.18122266023212966,
+        1.9998162992505284,
+        -0.3077725178835796
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Lower engagement",
+      "center": [
+        -0.31952670349538265,
+        -0.2731893078724985,
+        -1.045617193540515
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Recent and engaged",
+      "center": [
+        -0.39160324401428986,
+        -0.3441911033701535,
+        0.7243784710670749
+      ]
+    }
+  ],
+  "thresholds": {
+    "frequent": 7.0,
+    "long_gap": 41.0,
+    "low_engagement": 0.403
+  },
+  "reference_rows": 50000,
+  "evaluation_sample": 3000,
+  "evaluation_seed": 42,
+  "evaluations": [
+    {
+      "k": 2,
+      "silhouette": 0.2812852779796044,
+      "smallest_group": 20541,
+      "largest_group": 29459
+    },
+    {
+      "k": 3,
+      "silhouette": 0.2995274012256383,
+      "smallest_group": 9183,
+      "largest_group": 23828
+    },
+    {
+      "k": 4,
+      "silhouette": 0.3276004700449972,
+      "smallest_group": 6471,
+      "largest_group": 21340
+    },
+    {
+      "k": 5,
+      "silhouette": 0.3050572888535779,
+      "smallest_group": 3261,
+      "largest_group": 18000
+    },
+    {
+      "k": 6,
+      "silhouette": 0.2988973140818959,
+      "smallest_group": 2904,
+      "largest_group": 15604
+    },
+    {
+      "k": 7,
+      "silhouette": 0.2536271535624855,
+      "smallest_group": 2606,
+      "largest_group": 11082
+    },
+    {
+      "k": 8,
+      "silhouette": 0.266407490649637,
+      "smallest_group": 2341,
+      "largest_group": 11057
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+segment_id,customer_segment,customers,median_frequency,median_days,median_engagement,median_clv,median_satisfaction,median_loyalty,churned_customers,known_churn,churn_share,rq2_customers
+1,Frequent buyers,8078,11.0,18.0,0.521,14919.5,1.9,26.5,6150,8078,0.7613270611537509,2537
+2,Long purchase gap,6471,3.0,81.0,0.469,14737.0,1.9,26.3,4940,6471,0.7634059650749497,1224
+3,Lower engagement,14111,3.0,18.0,0.366,14724.0,1.9,26.3,10844,14111,0.7684784919566295,1493
+4,Recent and engaged,21340,3.0,15.0,0.575,14784.0,1.9,26.4,16350,21340,0.7661668228678538,154
