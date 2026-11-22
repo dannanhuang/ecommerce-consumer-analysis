@@ -1,0 +1,47 @@
+name: Process customer batches
+
+on:
+  push:
+    branches:
+      - data-automation
+      - main
+    paths:
+      - "simulator_batches/incoming/batch_*.csv"
+
+permissions:
+  contents: read
+
+jobs:
+  clean-batches:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download repository files
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pandas
+        run: python -m pip install pandas
+
+      - name: Combine received batches
+        run: python batch_demo.py process --folder simulator_batches
+
+      - name: Clean the data and generate a quality report
+        run: |
+          mkdir -p reports
+          python data_exam.py simulator_batches/customers_received.csv > reports/batch_data_quality.txt
+          test -s simulator_batches/customer_clean.csv
+          cat reports/batch_data_quality.txt
+
+      - name: Upload cleaned data and quality report
+        uses: actions/upload-artifact@v7
+        with:
+          name: customer-batch-results
+          path: |
+            simulator_batches/customer_clean.csv
+            reports/batch_data_quality.txt
+          if-no-files-found: error
