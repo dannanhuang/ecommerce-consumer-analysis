@@ -1,0 +1,25 @@
+{
+  "input": "/Users/samillelance/Desktop/B_Channel/customer_clean.csv",
+  "sha256": "9d07d0e29d282dfeaff064b6214ac3914d7f27d465d1bb68dcc970ac5f57f93a",
+  "rows": 50000,
+  "unique_customers": 50000,
+  "missing_raw": {
+    "CustomerID": 0,
+    "Marketing_Channel": 0,
+    "First_Purchase_Channel": 0,
+    "Customer_Lifetime_Value": 0,
+    "Customer_Acquisition_Cost": 0
+  },
+  "population": "One row per unique customer; all customers retained in counts.",
+  "missing_customer_id_count": 0,
+  "duplicate_customer_id_count": 0,
+  "invalid_or_missing_Customer_Lifetime_Value": 0,
+  "invalid_or_missing_Customer_Acquisition_Cost": 0,
+  "zero_CAC": 0,
+  "excluded_from_ratio": 0,
+  "supplied_ratio_comparable_rows": 50000,
+  "supplied_ratio_difference_over_0_011": 0,
+  "purchase_before_acquisition": 12495,
+  "unparseable_or_missing_dates": 0,
+  "date_policy": "Flag only; no date-based filtering in this channel comparison. Confirm meanings with A."
+}
